@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sentiment</title>
+        <!-- <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon"> -->
+        <style>
+
+        </style>
+        <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+        <script>
+            AFRAME.registerComponent('click-event', {
+                init: function () {
+                    this.el.addEventListener('click', event => {
+                        let position = event.detail.intersection.point
+                        let box = document.createElement('a-box')
+                        let size = 0.3
+                        box.setAttribute('scale', `${size} ${size} ${size}`)
+                        box.setAttribute('color', 'red')
+                        box.setAttribute('position', position)
+                        this.el.sceneEl.appendChild(box)
+                    });
+                }
+            });
+        </script>
+    </head>
+    
+    <body>
+        <a-scene background="color: #FAFAFA">
+            <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>
+            <a-camera>
+                <a-cursor click-event></a-cursor>
+            </a-camera>
+        </a-scene>
+    </body>
+</html>
