@@ -17,23 +17,20 @@
         function showPosition(position) {
             let text = document.querySelector('a-text');
             let gps = document.createAttribute('gps-entity-place');
+            let message = document.createAttribute('value');
             gps.value = `latitude: ${position.coords.latitude - 0.001}; longitude: ${position.coords.longitude + 0.001}`;
+            message.value = 'This content will always face you.';
             text.setAttributeNode(gps);
+            text.setAttributeNode(message);
         }
       </script>
   </head>
   <body style="margin: 0; overflow: hidden;" onload="getLocation()">
-    <a-scene
-      vr-mode-ui="enabled: false"
-      embedded
-      arjs="sourceType: webcam; debugUIEnabled: false;"
-    >
-      <a-text id="note"
-        value="This content will always face you."
-        look-at="[gps-camera]"
-        scale="50 50 50"
-      ></a-text>
-      <a-camera gps-camera rotation-reader> </a-camera>
+    <a-scene vr-mode-ui="enabled: false" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <a-text id="note" value="This content will always face you." look-at="[gps-camera]" scale="50 50 50">
+        This content will always face you.
+      </a-text>
+      <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
   </body>
 </html>
