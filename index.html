@@ -79,7 +79,12 @@
   </head>
   <body style="margin: 0; overflow: hidden;" onload="getLocation()">
     <a-scene vr-mode-ui="enabled: false" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-image id="image-1" url="(https://github.com/CPSC-581-F2022-Group/Sentiment/blob/main/img/I_love_you.png?raw=true)" crossorigin="anonymous" height="1" width="1" position="1 1 1"></a-image>
+      <a-assets>
+        <img id="image-1" src="img/I_love_you.png"></a-image>
+        <!-- <img id="image-1" src="https://github.com/CPSC-581-F2022-Group/Sentiment/blob/main/img/I_love_you.png"> -->
+      </a-assets>
+      <a-image src="#image-1" height="0.5" width="0.5" position="0 2 -3" cross-origin="Anonymous"></a-image>
+      <!-- <a-image id="image-1" url="(https://github.com/CPSC-581-F2022-Group/Sentiment/blob/main/img/I_love_you.png?raw=true)" crossorigin="anonymous" height="1" width="1" position="1 1 1"></a-image> -->
       <!-- <a-image id="image-1" url=(img/heart.png) rotation="-90 0 0"></a-image> -->
       <!-- <a-image id="image-2" src="/img/don't_panic.png"></a-image>
       <a-image id="image-3" src="/img/I_love_you.png"></a-image>
