@@ -15,21 +15,78 @@
         }
     
         function showPosition(position) {
-            let text = document.querySelector('a-text');
-            let gps = document.createAttribute('gps-entity-place');
-            let message = document.createAttribute('value');
-            gps.value = `latitude: ${position.coords.latitude - 0.001}; longitude: ${position.coords.longitude + 0.001}`;
-            message.value = 'This content will always face you.';
-            text.setAttributeNode(gps);
-            text.setAttributeNode(message);
+          console.log(position.coords.latitude + " = lat test 1");
+          console.log(position.coords.longitude + " = long test 1");
+          // gps1.value = `latitude: ${position.coords.latitude - 0.001}; longitude: ${position.coords.longitude + 0.001}`;
+
+          let image1 = document.querySelector('a-image');
+          let gps1 = document.createAttribute('gps-entity-place');
+          let lat1 = getNewLatitude(position.coords.latitude, 1);
+          let long1 = getNewLongitude(position.coords.latitude, position.coords.longitude, 0);
+          gps1.value = `latitude: ${lat1}; longitude: ${long1}`;
+          image1.setAttributeNode(gps1);
+
+          // let image2 = document.querySelector('a-image');
+          // let gps2 = document.createAttribute('gps-entity-place');
+          // let lat2 = getNewLatitude(position.coords.latitude, -3);
+          // let long2 = getNewLongitude(position.coords.latitude, position.coords.longitude, 0);
+          // gps2.value = `latitude: ${lat2}; longitude: ${long2}`;
+          // image2.setAttributeNode(gps2);
+
+          // let image3 = document.querySelector('a-image');
+          // let gps3 = document.createAttribute('gps-entity-place');
+          // let lat3 = getNewLatitude(position.coords.latitude, 0);
+          // let long3 = getNewLongitude(position.coords.latitude, position.coords.longitude, 0);
+          // gps3.value = `latitude: ${lat3}; longitude: ${long3}`;
+          // image3.setAttributeNode(gps3);
+
+          // let image4 = document.querySelector('a-image');
+          // let gps4 = document.createAttribute('gps-entity-place');
+          // let lat4 = getNewLatitude(position.coords.latitude, -1);
+          // let long4 = getNewLongitude(position.coords.latitude, position.coords.longitude, -1);
+          // gps4.value = `latitude: ${lat4}; longitude: ${long4}`;
+          // image4.setAttributeNode(gps4);
+
+          // let image5 = document.querySelector('a-image');
+          // let gps5 = document.createAttribute('gps-entity-place');
+          // let lat5 = getNewLatitude(position.coords.latitude, 4);
+          // let long5 = getNewLongitude(position.coords.latitude, position.coords.longitude, -1);
+          // gps5.value = `latitude: ${lat5}; longitude: ${long5}`;
+          // image5.setAttributeNode(gps5);
+        }
+
+        function getNewLatitude(latitude, meters) {
+          //Update latitude of image
+          var earth = 6378.137,  //radius of the earth in kilometer
+          pi = Math.PI,
+          m = (1 / ((2 * pi / 360) * earth)) / 1000;  //1 meter in degree
+          var new_latitude = latitude + (meters * m);
+          console.log(new_latitude + " = lat test 2");
+          return new_latitude;
+        }
+
+        function getNewLongitude(latitude, longitude, meters) {
+          //Update longitude of image
+          var earth = 6378.137,  //radius of the earth in kilometer
+          pi = Math.PI,
+          cos = Math.cos,
+          m = (1 / ((2 * pi / 360) * earth)) / 1000;  //1 meter in degree
+          var new_longitude = longitude + (meters * m) / cos(latitude * (pi / 180));
+          console.log(new_longitude + " = long test 2");
+          return new_longitude;
         }
       </script>
   </head>
   <body style="margin: 0; overflow: hidden;" onload="getLocation()">
     <a-scene vr-mode-ui="enabled: false" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-text id="note" value="This content will always face you." look-at="[gps-camera]" scale="50 50 50">
-        This content will always face you.
-      </a-text>
+      <a-image id="image-1" url="(https://github.com/CPSC-581-F2022-Group/Sentiment/blob/main/img/I_love_you.png?raw=true)" crossorigin="anonymous" height="1" width="1" position="1 1 1"></a-image>
+      <!-- <a-image id="image-1" url=(img/heart.png) rotation="-90 0 0"></a-image> -->
+      <!-- <a-image id="image-2" src="/img/don't_panic.png"></a-image>
+      <a-image id="image-3" src="/img/I_love_you.png"></a-image>
+      <a-image id="image-4" src="/img/rising_tide.png"></a-image>
+      <a-image id="image-5" src="/img/the_force.png"></a-image> -->
+
+      <!-- <a-plane src="#image-1" height="100" width="100" rotation="-90 0 0"></a-plane> -->
       <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
   </body>
