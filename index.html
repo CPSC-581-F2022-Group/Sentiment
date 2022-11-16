@@ -26,33 +26,33 @@
           gps1.value = `latitude: ${lat1}; longitude: ${long1}`;
           image1.setAttributeNode(gps1);
 
-           let image2 = document.querySelector('a-image');
-           let gps2 = document.createAttribute('gps-entity-place');
-           let lat2 = getNewLatitude(position.coords.latitude, -3);
-           let long2 = getNewLongitude(position.coords.latitude, position.coords.longitude, 0);
-           gps2.value = `latitude: ${lat2}; longitude: ${long2}`;
-           image2.setAttributeNode(gps2);
+         let image2 = document.querySelector('a-image');
+         let gps2 = document.createAttribute('gps-entity-place');
+         let lat2 = getNewLatitude(position.coords.latitude, -3);
+         let long2 = getNewLongitude(position.coords.latitude, position.coords.longitude, 0);
+         gps2.value = `latitude: ${lat2}; longitude: ${long2}`;
+         image2.setAttributeNode(gps2);
 
-          // let image3 = document.querySelector('a-image');
-          // let gps3 = document.createAttribute('gps-entity-place');
-          // let lat3 = getNewLatitude(position.coords.latitude, 0);
-          // let long3 = getNewLongitude(position.coords.latitude, position.coords.longitude, 0);
-          // gps3.value = `latitude: ${lat3}; longitude: ${long3}`;
-          // image3.setAttributeNode(gps3);
+         let image3 = document.querySelector('a-image');
+         let gps3 = document.createAttribute('gps-entity-place');
+         let lat3 = getNewLatitude(position.coords.latitude, 0);
+         let long3 = getNewLongitude(position.coords.latitude, position.coords.longitude, 0);
+         gps3.value = `latitude: ${lat3}; longitude: ${long3}`;
+         image3.setAttributeNode(gps3);
 
-          // let image4 = document.querySelector('a-image');
-          // let gps4 = document.createAttribute('gps-entity-place');
-          // let lat4 = getNewLatitude(position.coords.latitude, -1);
-          // let long4 = getNewLongitude(position.coords.latitude, position.coords.longitude, -1);
-          // gps4.value = `latitude: ${lat4}; longitude: ${long4}`;
-          // image4.setAttributeNode(gps4);
+          let image4 = document.querySelector('a-image');
+          let gps4 = document.createAttribute('gps-entity-place');
+          let lat4 = getNewLatitude(position.coords.latitude, -1);
+          let long4 = getNewLongitude(position.coords.latitude, position.coords.longitude, -1);
+          gps4.value = `latitude: ${lat4}; longitude: ${long4}`;
+          image4.setAttributeNode(gps4);
 
-          // let image5 = document.querySelector('a-image');
-          // let gps5 = document.createAttribute('gps-entity-place');
-          // let lat5 = getNewLatitude(position.coords.latitude, 4);
-          // let long5 = getNewLongitude(position.coords.latitude, position.coords.longitude, -1);
-          // gps5.value = `latitude: ${lat5}; longitude: ${long5}`;
-          // image5.setAttributeNode(gps5);
+          let image5 = document.querySelector('a-image');
+          let gps5 = document.createAttribute('gps-entity-place');
+          let lat5 = getNewLatitude(position.coords.latitude, 4);
+          let long5 = getNewLongitude(position.coords.latitude, position.coords.longitude, -1);
+          gps5.value = `latitude: ${lat5}; longitude: ${long5}`;
+          image5.setAttributeNode(gps5);
         }
 
         function getNewLatitude(latitude, meters) {
