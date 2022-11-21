@@ -10,24 +10,61 @@
     <!-- include ar.js for A-Frame to allow for ar-interaction like marker tracking-->
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
     <script>      
+
+      AFRAME.registerComponent('location-placed-image', {
+            init: function () {
+              this.el.setAttribute("src", "#image-1")
+              this.el.setAttribute("height", "1")
+              this.el.setAttribute("width", "1")
+              this.el.setAttribute("gps-entity-place", `latitude: ${getLocation().latitude+0.000001}; longitude: ${getLocation().longitude+0.000001}`)
+              this.el.setAttribute("position", "0 1 0")
+              this.el.setAttribute("rotation", "90 90 0")
+              this.el.setAttribute("cross-origin","Anonymous")
+            }
+          });
+      
+      
+      AFRAME.registerComponent('force-placed-image', {
+            init: function () {
+              this.el.setAttribute("src", "#image-1")
+              this.el.setAttribute("height", "0.5")
+              this.el.setAttribute("width", "0.5")
+              this.el.setAttribute("position", "0 2 -3")
+              this.el.setAttribute("cross-origin","Anonymous")
+            }
+          });
+      
+      AFRAME.registerComponent('cursor-listener', {
+        init: function () {
+          this.el.addEventListener('click', function (evt) {
+            console.log("cursor clicked")
+            placeImage()
+          });
+        }
+      });
+      
+    initialPosition = false;
+
     // Create a function that creates the initial distance of the object, if the user is moving subtract 
     // the delta from the object and recreate it and scale it to the appropriate size (if needed). Only
     // include 2 images, create a functionality to add specified image with a taskbar at the top.
-      setInterval(function() {
-        getLocation();
-        var latitutde = position.coords.latitude;
-        var longitude = position.coords.longitude;
+    setInterval(()=> {
+        navigator.geolocation.getCurrentPosition((position)=>{
+          var latitude = position.coords.latitude;
+          var longitude = position.coords.longitude;
 
-        if ((position.coords.latitude >= (latitude + 0.005)) && (position.coords.longitude >= (longitude + 0.005))) {
-          updateImageLocation(0);
-        } else if ((position.coords.latitude >= (latitude + 0.005)) && (position.coords.longitude <= (longitude - 0.005))) {
-          updateImageLocation(1);
-        } else if ((position.coords.latitude <= (latitude - 0.005)) && (position.coords.longitude >= (longitude + 0.005))) {
-          updateImageLocation(2);
-        } else if ((position.coords.latitude <= (latitude - 0.005)) && (position.coords.longitude <= (longitude - 0.005))) {
-          updateImageLocation(3);
-        }
+          if ((initialPosition.latitude >= (latitude + 0.005)) && (initialPosition.longitude >= (longitude + 0.005))) {
+            updateImageLocation(0);
+          } else if ((initialPosition.latitude >= (latitude + 0.005)) && (initialPosition.longitude <= (longitude - 0.005))) {
+            updateImageLocation(1);
+          } else if ((initialPosition.latitude <= (latitude - 0.005)) && (initialPosition.longitude >= (longitude + 0.005))) {
+            updateImageLocation(2);
+          } else if ((initialPosition.latitude <= (latitude - 0.005)) && (initialPosition.longitude <= (longitude - 0.005))) {
+            updateImageLocation(3);
+          }
+        }, (_)=>{}, {timeout:1000})
       }, 250);
+    
 
       function updateImageLocation(val) {
         let img1 = document.querySelector('image-1');
@@ -49,7 +86,33 @@
       }
 
       function getLocation() {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        
+        if (!initialPosition){ // Set the intial position on first call
+          navigator.geolocation.getCurrentPosition((position)=>{
+            initialPosition = {
+              "latitude":position.coords.latitude,
+              "longitude":position.coords.longitude,
+              "altitude":position.coords.altitude,
+              "heading":position.coords.heading,
+            }
+          }, (_)=>{}, {timeout:400})
+
+        }
+        
+        
+        navigator.geolocation.getCurrentPosition((position)=>{
+            currentPosition = {
+              "latitude":position.coords.latitude,
+              "longitude":position.coords.longitude,
+              "altitude":position.coords.altitude,
+              "heading":position.coords.heading,
+            }
+          }, (_)=>{currentPosition=initialPosition}, {timeout:1000})
+        
+        
+        
+        navigator.geolocation.getCurrentPosition(showPosition, (_)=>{}, {timeout:1000})
+        return currentPosition
       }
   
       function showPosition(position) {
@@ -99,23 +162,100 @@
         console.log(new_longitude + " = long test 2");
         return new_longitude;
       }
+
+      function placeImage(){
+
+        navigator.geolocation.getCurrentPosition((position)=>{ // If navigator is available
+          console.log("adding: ", `<a-image src="#image-4" height="0.5" width="1" 
+          gps-entity-place="latitude: ${position.coords.latitude+0.00001}; longitude: ${position.coords.longitude+0.00001}" 
+          cross-origin="Anonymous"></a-image>`)
+          
+          
+          
+          sceneEl = document.querySelector('a-scene');
+          
+          
+
+          var entityEl = document.createElement('a-image');
+          entityEl.setAttribute('location-placed-image', '');
+          sceneEl.appendChild(entityEl);
+          console.log(entityEl)
+          
+        }, (error)=>{ // If navigator is not available
+          console.log("adding: ", `<a-image src="#image-4" height="0.5" width="1" 
+          position="-2 3 -4" 
+          cross-origin="Anonymous"></a-image>`)
+          
+          
+          sceneEl = document.querySelector('a-scene');
+          
+
+
+          var entityEl = document.createElement('a-image');
+          entityEl.setAttribute('force-placed-image', '');
+          sceneEl.appendChild(entityEl);
+        },
+                                                 {timeout:1500}
+        )
+      }
+      
+      
+      
+      function forcePlaceImage(){
+        console.log("adding: ", `<a-image src="#image-4" height="0.5" width="1" 
+          position="-2 3 -4" 
+          cross-origin="Anonymous"></a-image>`)
+          
+          
+          sceneEl = document.querySelector('a-scene');
+          
+
+
+          var entityEl = document.createElement('a-image');
+          entityEl.setAttribute('force-placed-image', '');
+          sceneEl.appendChild(entityEl);
+      }
+
+      
+      function initialize(){
+        
+        showImage()
+      }
+      
+      const sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+      }
+      
+      async function showImage(){
+        console.log("Showing")
+        await sleep(8000) // sleep 500 miliseconds
+        // Fade in the image + text
+        for (let opacity = 75; opacity <= 100; opacity++) {
+          console.log(opacity)
+          document.getElementById("a-image-1").setAttribute("opacity",opacity)
+        }
+        
+      }
+      initialize()
+
       </script>
   </head>
-  <body style="margin: 0; overflow: hidden;" onload="getLocation()">
+  <body style="margin: 0; overflow: hidden;">
     <div id="buttonBanner" position="relative" height="5%">
-      <button id="placeImage">Leave Note</button> 
+      <button id="placeImage" onclick="showImage()">Leave Note</button> 
     </div>
-    <a-scene vr-mode-ui="enabled: false" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-assets>
-        <img id="image-1" src="img/I_love_you.png"></a-image>
-        <img id="image-2" src="img/Screenshot_3.png"></a-image>
-        <img id="image-3" src="img/don't_panic.png"></a-image>
+    <a-scene vr-mode-ui="enabled: false" embedded arjs="sourceType: webcam; debugUIEnabled: false;" style="height:90vh">
+      <a-assets id="entity-images">
+        <img id="image-1" src="img/I_love_you.png" crossorigin="anonymous"/>
+        <img id="image-2" src="img/I miss you.png" crossorigin="anonymous"/>
+        <img id="image-3" src="img/merry christmas.png" crossorigin="anonymous"/>
+        <img id="image-4" src="img/happy halloween.png" crossorigin="anonymous"/>
       </a-assets>
-
-      <a-image src="#image-1" height="0.5" width="0.5" position="0 2 -3" cross-origin="Anonymous"></a-image>
-      <a-image src="#image-2" height="1" width="1" position="1 2 -3" cross-origin="Anonymous"></a-image>
-      <a-image src="#image-3" height="0.5" width="1" position="-1 2 -3" cross-origin="Anonymous"></a-image>
-      <a-camera gps-camera rotation-reader></a-camera>
+      <!-- You must pick 1 of the 4 images to use-->
+      <a-image id="a-image-1" src="#image-1" height="0.5" width="0.5" position="0 2 -3" cross-origin="Anonymous" opacity="0"></a-image>
+      <a-camera gps-camera="minDistance: 10;" rotation-reader>
+      </a-camera>
+      
     </a-scene>
   </body>
 </html>
