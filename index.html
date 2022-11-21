@@ -195,7 +195,7 @@
           entityEl.setAttribute('force-placed-image', '');
           sceneEl.appendChild(entityEl);
         },
-        {timeout:1500}
+                                                 {timeout:1500}
         )
       }
       
@@ -218,34 +218,41 @@
 
       
       function initialize(){
-        getLocation()
-        sleep(500) // sleep 500 miliseconds
-        forcePlaceImage()
-        // placeImage()
+        
+        showImage()
       }
       
       const sleep = (milliseconds) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
       }
       
+      async function showImage(){
+        console.log("Showing")
+        await sleep(8000) // sleep 500 miliseconds
+        // Fade in the image + text
+        for (let opacity = 75; opacity <= 100; opacity++) {
+          console.log(opacity)
+          document.getElementById("a-image-1").setAttribute("opacity",opacity)
+        }
+        
+      }
+      initialize()
 
       </script>
   </head>
-  <body style="margin: 0; overflow: hidden;" onload="initialize()">
+  <body style="margin: 0; overflow: hidden;">
     <div id="buttonBanner" position="relative" height="5%">
-      <button id="placeImage" onclick="placeImage()">Leave Note</button> 
+      <button id="placeImage" onclick="showImage()">Leave Note</button> 
     </div>
     <a-scene vr-mode-ui="enabled: false" embedded arjs="sourceType: webcam; debugUIEnabled: false;" style="height:90vh">
       <a-assets id="entity-images">
         <img id="image-1" src="img/I_love_you.png" crossorigin="anonymous"/>
-        <img id="image-2" src="img/Screenshot_3.png" crossorigin="anonymous"/>
-        <img id="image-3" src="img/don't_panic.png" crossorigin="anonymous"/>
-        <img id="image-4" src="img/I_love_you.png" crossorigin="anonymous"/>
+        <img id="image-2" src="img/I miss you.png" crossorigin="anonymous"/>
+        <img id="image-3" src="img/merry christmas.png" crossorigin="anonymous"/>
+        <img id="image-4" src="img/happy halloween.png" crossorigin="anonymous"/>
       </a-assets>
-
-<!--       <a-image src="#image-1" height="0.5" width="0.5" position="0 2 -3" cross-origin="Anonymous"></a-image>
-      <a-image src="#image-2" height="1" width="1" position="1 2 -3" cross-origin="Anonymous"></a-image>
-      <a-image src="#image-3" height="0.5" width="1" position="-1 2 -3" cross-origin="Anonymous"></a-image> -->
+      <!-- You must pick 1 of the 4 images to use-->
+      <a-image id="a-image-1" src="#image-1" height="0.5" width="0.5" position="0 2 -3" cross-origin="Anonymous" opacity="0"></a-image>
       <a-camera gps-camera="minDistance: 10;" rotation-reader>
       </a-camera>
       
